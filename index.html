@@ -1,35 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOTEL SUBHAKSHAM POS</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HOTEL SUBHAKSHAM POS</title>
+
+<link rel="stylesheet" href="css/style.css">
+
 </head>
 
 <body>
 
-<header class="header">
+<header>
 
-    <div class="hotel-details">
+    <div class="logo-section">
+
         <h1>HOTEL SUBHAKSHAM</h1>
+
         <p>📞 8142406358</p>
+
     </div>
 
-    <div class="bill-info">
+    <div class="bill-header">
 
-        <div>
+        <div class="header-box">
             <label>Bill No</label>
             <span id="billNo">1001</span>
         </div>
 
-        <div>
+        <div class="header-box">
             <label>Date</label>
             <span id="billDate"></span>
         </div>
 
-        <div>
+        <div class="header-box">
             <label>Time</label>
             <span id="billTime"></span>
         </div>
@@ -38,13 +45,13 @@
 
 </header>
 
-<div class="main-container">
+<div class="container">
 
     <!-- LEFT PANEL -->
 
-    <aside class="left-panel">
+    <div class="left-panel">
 
-        <div class="search-box">
+        <div class="search-section">
 
             <input
                 type="text"
@@ -53,21 +60,25 @@
 
         </div>
 
-        <div id="categoryContainer" class="category-container">
+        <div
+            id="categoryContainer"
+            class="category-container">
 
         </div>
 
-        <div id="menuContainer" class="menu-container">
+        <div
+            id="menuContainer"
+            class="menu-grid">
 
         </div>
 
-    </aside>
+    </div>
 
     <!-- RIGHT PANEL -->
 
-    <section class="right-panel">
+    <div class="right-panel">
 
-        <div class="bill-top">
+        <div class="customer-section">
 
             <select id="billType">
                 <option>Dine In</option>
@@ -75,22 +86,42 @@
             </select>
 
             <input
-                type="number"
+                type="text"
                 id="tableNo"
                 placeholder="Table No">
 
         </div>
 
-        <table>
+        <div class="customer-details">
+
+            <input
+                type="text"
+                id="customerName"
+                placeholder="Customer Name">
+
+            <input
+                type="text"
+                id="customerPhone"
+                placeholder="Mobile Number">
+
+            <select id="paymentMode">
+                <option>Cash</option>
+                <option>UPI</option>
+                <option>Card</option>
+            </select>
+
+        </div>
+
+        <table class="bill-table">
 
             <thead>
 
                 <tr>
-
-                    <th>Item</th>
-                    <th>Qty</th>
-                    <th>Total</th>
-
+                    <th width="35%">Item</th>
+                    <th width="20%">Qty</th>
+                    <th width="15%">Price</th>
+                    <th width="20%">Total</th>
+                    <th width="10%">❌</th>
                 </tr>
 
             </thead>
@@ -103,29 +134,111 @@
 
         <div class="summary">
 
-            <h2>Total</h2>
+            <div class="summary-row">
 
-            <h1 id="grandTotal">₹0</h1>
+                <span>Subtotal</span>
+
+                <span id="subTotal">₹0.00</span>
+
+            </div>
+
+            <div class="summary-row">
+
+                <span>Discount</span>
+
+                <input
+                    id="discount"
+                    type="number"
+                    value="0"
+                    min="0">
+
+            </div>
+
+            <div class="summary-row">
+
+                <span>GST</span>
+
+                <span id="gst">₹0.00</span>
+
+            </div>
+
+            <div class="summary-row grand">
+
+                <span>Grand Total</span>
+
+                <span id="grandTotal">₹0.00</span>
+
+            </div>
 
         </div>
 
-        <div class="buttons">
+        <div class="button-panel">
+
+            <button id="newBillBtn">
+                🆕 New Bill
+            </button>
+
+            <button id="historyBtn">
+                📋 History
+            </button>
 
             <button id="printBtn">
                 🖨 Print Bill
             </button>
 
-            <button id="newBillBtn">
-                ➕ New Bill
-            </button>
-
         </div>
 
-    </section>
+    </div>
 
 </div>
 
+<!-- ================= BILL HISTORY ================= -->
+
+<div id="historyModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Bill History</h2>
+
+            <button onclick="closeHistory()">✖</button>
+
+        </div>
+
+        <table class="history-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Bill No</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="historyBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- Scripts -->
+
+<script src="js/storage.js"></script>
+<script src="js/billing.js"></script>
+<script src="js/menu.js"></script>
 <script src="js/app.js"></script>
+<script src="js/printer.js"></script>
 
 </body>
 

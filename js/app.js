@@ -1,102 +1,220 @@
-// ===============================
+// ==========================================
 // HOTEL SUBHAKSHAM POS
-// App Initialization
-// ===============================
+// app.js
+// ==========================================
 
-let billNumber = localStorage.getItem("billNumber");
+let menuData = [];
+let currentCategory = "All";
 
-if (!billNumber) {
-    billNumber = 1001;
-}
+const billNoElement = document.getElementById("billNo");
+const billDateElement = document.getElementById("billDate");
+const billTimeElement = document.getElementById("billTime");
 
-document.getElementById("billNo").textContent = billNumber;
+const menuContainer = document.getElementById("menuContainer");
+const categoryContainer = document.getElementById("categoryContainer");
+const searchBox = document.getElementById("searchBox");
+
+// ==========================================
+// Date & Time
+// ==========================================
 
 function updateDateTime() {
 
     const now = new Date();
 
-    document.getElementById("billDate").textContent =
-        now.toLocaleDateString("en-IN");
+    billDateElement.textContent = now.toLocaleDateString("en-IN");
 
-    document.getElementById("billTime").textContent =
-        now.toLocaleTimeString("en-IN");
+    billTimeElement.textContent = now.toLocaleTimeString("en-IN");
 
 }
-
-updateDateTime();
 
 setInterval(updateDateTime,1000);
 
-// ===============================
+updateDateTime();
+
+// ==========================================
+// Bill Number
+// ==========================================
+
+let billNumber = Number(localStorage.getItem("billNumber") || 1001);
+
+billNoElement.textContent = billNumber;
+
+// ==========================================
 // Load Menu
-// ===============================
+// ==========================================
 
-let menuData = [];
+async function loadMenu(){
 
-async function loadMenu() {
+    try{
 
-    const response = await fetch("data/menu.json");
+        const response = await fetch("data/menu.json");
 
-    menuData = await response.json();
+        menuData = await response.json();
 
-    loadCategories();
+        loadCategories();
 
-    displayMenu(menuData);
+        displayMenu(menuData);
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        menuContainer.innerHTML =
+        "<h2 style='color:red'>Unable to load menu.json</h2>";
+
+    }
 
 }
 
-function loadCategories() {
+// ==========================================
+// Categories
+// ==========================================
 
-    const categories = [...new Set(menuData.map(item => item.category))];
+function loadCategories(){
 
-    const container = document.getElementById("categoryContainer");
+    categoryContainer.innerHTML="";
 
-    container.innerHTML = "";
+    const allButton=document.createElement("button");
 
-    const allBtn = document.createElement("button");
-    allBtn.textContent = "All";
-    allBtn.className = "category-btn";
-    allBtn.onclick = () => displayMenu(menuData);
+    allButton.innerText="All";
 
-    container.appendChild(allBtn);
+    allButton.onclick=()=>{
 
-    categories.forEach(category => {
+        currentCategory="All";
 
-        const btn = document.createElement("button");
+        filterMenu();
 
-        btn.textContent = category;
+    };
 
-        btn.className = "category-btn";
+    categoryContainer.appendChild(allButton);
 
-        btn.onclick = () => {
+    const categories=[...new Set(menuData.map(item=>item.category))];
 
-            displayMenu(menuData.filter(item => item.category === category));
+    categories.forEach(category=>{
+
+        const btn=document.createElement("button");
+
+        btn.innerText=category;
+
+        btn.onclick=()=>{
+
+            currentCategory=category;
+
+            filterMenu();
 
         };
 
-        container.appendChild(btn);
+        categoryContainer.appendChild(btn);
 
     });
 
 }
 
-function displayMenu(items) {
+// ==========================================
+// Display Menu
+// ==========================================
 
-    const container = document.getElementById("menuContainer");
+function displayMenu(items){
 
-    container.innerHTML = "";
+    menuContainer.innerHTML="";
 
-    items.forEach(item => {
+    items.forEach(item=>{
 
-        container.innerHTML += `
-            <div class="menu-card">
-                <h3>${item.name}</h3>
-                <p>₹${item.price}</p>
-            </div>
+        const card=document.createElement("div");
+
+        card.className="menu-card";
+
+        card.innerHTML=`
+
+            <h3>${item.name}</h3>
+
+            <p>₹${item.price}</p>
+
         `;
 
+        card.onclick=()=>{
+
+            addItem(item);
+
+        };
+
+        menuContainer.appendChild(card);
+
     });
 
 }
+
+// ==========================================
+// Search
+// ==========================================
+
+searchBox.addEventListener("keyup",filterMenu);
+
+function filterMenu(){
+
+    const text=searchBox.value.toLowerCase();
+
+    let filtered=menuData;
+
+    if(currentCategory!="All"){
+
+        filtered=filtered.filter(item=>item.category===currentCategory);
+
+    }
+
+    if(text!=""){
+
+        filtered=filtered.filter(item=>
+
+            item.name.toLowerCase().includes(text)
+
+        );
+
+    }
+
+    displayMenu(filtered);
+
+}
+
+// ==========================================
+// New Bill
+// ==========================================
+
+document.getElementById("newBillBtn").addEventListener("click",()=>{
+
+    if(confirm("Start New Bill?")){
+
+        billItems={};
+
+        renderBill();
+
+        billNumber++;
+
+        localStorage.setItem("billNumber",billNumber);
+
+        billNoElement.textContent=billNumber;
+
+        document.getElementById("tableNo").value="";
+
+        document.getElementById("billType").selectedIndex=0;
+
+    }
+
+});
+
+// ==========================================
+// Print
+// ==========================================
+
+document.getElementById("printBtn").addEventListener("click",()=>{
+
+    printBill();
+
+});
+
+// ==========================================
 
 loadMenu();
