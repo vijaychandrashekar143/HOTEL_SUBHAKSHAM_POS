@@ -1,0 +1,20 @@
+[
+  { "category": "Breakfast", "name": "Idly", "price": 15 },
+  { "category": "Breakfast", "name": "Vadai", "price": 15 },
+  { "category": "Breakfast", "name": "Pongal", "price": 60 },
+  { "category": "Breakfast", "name": "Chapati (2 pcs)", "price": 50 },
+  { "category": "Breakfast", "name": "Parota (2 pcs)", "price": 50 },
+
+  { "category": "Rice", "name": "Tomato Rice", "price": 50 },
+  { "category": "Rice", "name": "Curd Rice", "price": 50 },
+  { "category": "Rice", "name": "Veg Fried Rice", "price": 80 },
+  { "category": "Rice", "name": "Paneer Fried Rice", "price": 100 },
+
+  { "category": "Dosa", "name": "Plain Dosa", "price": 50 },
+  { "category": "Dosa", "name": "Masala Dosa", "price": 70 },
+  { "category": "Dosa", "name": "Ghee Roast", "price": 75 },
+  { "category": "Dosa", "name": "Butter Dosa", "price": 90 },
+
+  { "category": "Snacks", "name": "Bajji", "price": 15 },
+  { "category": "Snacks", "name": "Bonda", "price": 15 }
+]
